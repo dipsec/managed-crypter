@@ -37,6 +37,8 @@
     <Compile Include="IO\CryptFile.cs" />
     <Compile Include="IO\FileTraverser.cs" />
     <Compile Include="IO\GenericDirectory.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
