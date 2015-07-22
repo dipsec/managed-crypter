@@ -31,6 +31,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Compiler\CompilerInfo.cs" />
+    <Compile Include="Compiler\GenericCompiler.cs" />
+    <Compile Include="IO\CryptFile.cs" />
+    <Compile Include="IO\FileTraverser.cs" />
+    <Compile Include="IO\GenericDirectory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
