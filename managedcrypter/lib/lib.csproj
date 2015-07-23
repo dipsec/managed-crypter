@@ -7,7 +7,7 @@
     <ProjectGuid>{08325412-FB2A-48A1-B8B1-9562B8EE883F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>lib</RootNamespace>
+    <RootNamespace>A</RootNamespace>
     <AssemblyName>lib</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,6 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="lib_class.cs" />
+    <Compile Include="ResourceGetter.cs" />
+    <Compile Include="RunPE.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

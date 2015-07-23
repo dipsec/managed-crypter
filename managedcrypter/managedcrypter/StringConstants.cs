@@ -8,8 +8,8 @@ namespace managedcrypter
     public sealed class StringConstants
     {
         // Payload
-        public static readonly string STR_PAYLOAD_KEY = "";
-        public static readonly string STR_PAYLOAD_NAME = "";
+        public static readonly string STR_PAYLOAD_KEY = "[PAYLOAD_KEY_RESOURCE_NAME]";
+        public static readonly string STR_PAYLOAD_NAME = "[PAYLOAD_RESOURCE_NAME]";
 
         // Library
         public static readonly string STR_LIBRARY_KEY = "[KEY_LIB_RESOURCE_NAME]";

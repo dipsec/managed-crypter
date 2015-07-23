@@ -334,7 +334,6 @@ namespace stub
         }
 
 
-
         static void Main(string[] args)
         {
             
