@@ -8,6 +8,7 @@ namespace managedcrypter.Compiler
         {
             EmbeddedResources = new List<string>();
             ExCompilerOptions = new List<string>();
+            ReferencedAssemblies = new List<string>();
             IconPath = string.Empty;
             OutputDestination = string.Empty;
             GenerateExe = false;
@@ -18,6 +19,7 @@ namespace managedcrypter.Compiler
         public bool GenerateExe { get; set; }
         public List<string> EmbeddedResources { get; set; }
         public List<string> ExCompilerOptions { get; set; }
+        public List<string> ReferencedAssemblies { get; set; }
         public string IconPath { get; set; }
         public string OutputDestination { get; set; }
     }

@@ -40,6 +40,7 @@
     <Compile Include="IO\SourceTraverser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StringConstants.cs" />
+    <Compile Include="USG\MethodGen.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

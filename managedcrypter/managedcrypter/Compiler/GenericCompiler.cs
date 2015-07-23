@@ -39,6 +39,9 @@ namespace managedcrypter.Compiler
 
         public bool CompileSource(GenericDirectory Directory, CompilerInfo cInfo)
         {
+            foreach (string asmReference in cInfo.ReferencedAssemblies)
+                cmpParams.ReferencedAssemblies.Add(asmReference);
+
             if (cInfo.EmbeddedResources.Count > 0)
                 cmpParams.EmbeddedResources.AddRange(cInfo.EmbeddedResources.ToArray());
 

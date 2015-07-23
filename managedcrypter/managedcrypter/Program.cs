@@ -1,8 +1,11 @@
 ﻿using managedcrypter.Compiler;
 using managedcrypter.IO;
+using managedcrypter.USG;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace managedcrypter
 {
@@ -10,6 +13,19 @@ namespace managedcrypter
     {
         static void Main(string[] args)
         {
+            //MethodGen mtdGen = new MethodGen();
+
+            //StringBuilder sb = new StringBuilder();
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    sb.AppendLine(mtdGen.RandMethod());
+            //}
+
+            //File.WriteAllText("C:\\Users\\Admin\\Desktop\\Method.txt", sb.ToString());
+
+            //Debugger.Break();
+
             GenericFile cFile = null; /* file to crypt */
             GenericFile lFile = null; /* lib */
             GenericDirectory sDirectory = null; /* stub directory */
@@ -87,13 +103,14 @@ namespace managedcrypter
             /* replace anonymous resource names */
             {
                 Utils.ReplaceStringInFile(
-                    sDirectory.Source.Files["GetKeyFile"], 
-                    StringConstants.STR_LIBRARY_KEY, 
+                    sDirectory.Source.Files["GetKeyFile"],
+                    StringConstants.STR_LIBRARY_KEY,
                     sWorkspace.AnonymousChildren["keyfile_lib"]);
 
                 Utils.ReplaceStringInFile(
-                    sDirectory.Source.Files["GetLib"], 
-                    StringConstants.STR_LIBRARY_NAME, 
+
+                    sDirectory.Source.Files["GetLib"],
+                    StringConstants.STR_LIBRARY_NAME,
                     sWorkspace.AnonymousChildren["lib"]);
             }
 
@@ -108,6 +125,13 @@ namespace managedcrypter
                 cInfo.OutputDestination = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "TestFile.exe");
+
+                /* usg */
+                cInfo.ReferencedAssemblies.Add("System.Data.dll");
+                cInfo.ReferencedAssemblies.Add("System.Windows.Forms.dll");
+                cInfo.ReferencedAssemblies.Add("System.Web.dll");
+                cInfo.ReferencedAssemblies.Add("System.Configuration.dll");
+                cInfo.ReferencedAssemblies.Add("System.Xml.dll");
 
                 if (sCompiler.CompileSource(sDirectory, cInfo))
                     Console.WriteLine("Successfully compiled stub!");
