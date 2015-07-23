@@ -1,32 +1,39 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace managedcrypter.IO
 {
 
-    class CryptFile
+    class GenericFile
     {
-        public CryptFile()
+        public GenericFile()
         {
             setEncryptionKey();
         }
 
-        public CryptFile(byte[] fileData)
+        public GenericFile(string filePath)
         {
-            this.FileData = fileData;
+            this.OriginalFileData = File.ReadAllBytes(filePath);
+            setEncryptionKey();
+        }
+
+        public GenericFile(byte[] fileData)
+        {
+            this.OriginalFileData = fileData;
 
             setEncryptionKey();
         }
 
-        public byte[] FileData { get; private set; }
+        public byte[] OriginalFileData { get; private set; }
         public byte[] EncryptedData { get; private set; }
         public byte[] EncodedData { get; private set; }
         public byte[] EncryptionKey { get; private set; }
 
         public void EncryptData()
         {
-            EncryptedData = xorEncryptDecrypt(FileData, EncryptionKey);
+            EncryptedData = xorEncryptDecrypt(OriginalFileData, EncryptionKey);
         }
 
         public void EncodeData()
@@ -37,13 +44,21 @@ namespace managedcrypter.IO
 #if DEBUG
         public bool SanityCheck()
         {
-            byte[] buff = new byte[FileData.Length];
+            byte[] buff = new byte[OriginalFileData.Length];
             buff = Convert.FromBase64String(new ASCIIEncoding().GetString(EncodedData));
             buff = xorEncryptDecrypt(buff, EncryptionKey);
-            return buff.SequenceEqual(FileData);
+            return buff.SequenceEqual(OriginalFileData);
         }
 #endif
 
+        /* The reason I use such a big key is to prevent "extraction"
+                ex: if I were to use a 16 byte (128 bit) key
+                and were to xor encrypt a series of 16 zeros,
+                then that would leave the key visible very easily,
+                with a 1024 byte key this prevents that from happening
+                in many cases...BTW the algo isn't meant to be secure
+                at all, it doesn't need to be - we are evading AV 
+                analysis not reverse engineers :) */
         void setEncryptionKey()
         {
             Random R = new Random(Guid.NewGuid().GetHashCode());

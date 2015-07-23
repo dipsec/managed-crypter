@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -34,10 +34,12 @@
   <ItemGroup>
     <Compile Include="Compiler\CompilerInfo.cs" />
     <Compile Include="Compiler\GenericCompiler.cs" />
-    <Compile Include="IO\CryptFile.cs" />
+    <Compile Include="IO\GenericFile.cs" />
     <Compile Include="IO\FileTraverser.cs" />
     <Compile Include="IO\GenericDirectory.cs" />
+    <Compile Include="IO\SourceTraverser.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StringConstants.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

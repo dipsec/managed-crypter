@@ -37,7 +37,7 @@ namespace managedcrypter.Compiler
             cmpParams.TreatWarningsAsErrors = false;
         }
 
-        public bool CompileSource(GenericDirectory sDirectory, CompilerInfo cInfo)
+        public bool CompileSource(GenericDirectory Directory, CompilerInfo cInfo)
         {
             if (cInfo.EmbeddedResources.Count > 0)
                 cmpParams.EmbeddedResources.AddRange(cInfo.EmbeddedResources.ToArray());
@@ -63,7 +63,9 @@ namespace managedcrypter.Compiler
 
             cmpParams.OutputAssembly = cInfo.OutputDestination;
 
-            CompilerResults cmpResults = csharpProvider.CompileAssemblyFromFile(cmpParams, sDirectory.Files.ToArray());
+            CompilerResults cmpResults = csharpProvider.CompileAssemblyFromFile(
+                cmpParams,
+                new List<string>(Directory.Source.Files.Values).ToArray());
 
 #if DEBUG
             if (cmpResults.Errors.HasErrors)
